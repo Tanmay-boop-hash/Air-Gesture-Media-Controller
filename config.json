@@ -1,0 +1,16 @@
+{
+    "gestures":{
+        "OPEN_PALM": "play_pause",  
+        "FIST": "mute",
+        "POINT_LEFT": "previous_track",
+        "POINT_RIGHT": "next_track",
+        "THUMB_UP": "volume_up",
+        "PINCH": "volume_down",
+        "PEACE": "like_song"
+    },
+    "settings": {
+        "hold_frames": 5,
+        "pinch_threshold": 0.28,
+        "active_profile": "default"
+    }
+}
