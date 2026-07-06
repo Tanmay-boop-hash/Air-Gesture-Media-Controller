@@ -215,6 +215,8 @@ Open `http://localhost:5173` in your browser.
 - **Right hand optimised** — the thumb extension heuristic and pointing direction logic are calibrated for a right hand facing the camera. Left hand users may need to adjust thresholds in `gesture_classifier.py`.
 - **Browser focus** — next/previous track controls in browser targets (YouTube Music, YouTube) require System Events keyboard injection, which depends on Accessibility permissions being granted.
 - **Spotify Web Player** — not supported as a target. Use Spotify desktop app or YouTube Music instead.
+- **Browser media targets** — play/pause and track controls require the browser tab to be in focus when using YouTube Music or YouTube. 
+  Volume controls work system-wide regardless of focus. Spotify desktop is unaffected — AppleScript controls it directly without focus dependency.
 
 ---
 
