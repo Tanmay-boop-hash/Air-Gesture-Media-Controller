@@ -1,31 +1,40 @@
+import json
 import subprocess
 import platform
+from pathlib import Path
 from pynput.keyboard import Key, Controller
 
 keyboard = Controller()
+CONFIG_PATH = Path(__file__).parent/"config.json"
 
 class ActionDispatcher:
 
     def __init__(self):
         self.is_mac = platform.system() == 'Darwin'
+        self._action_map = {
+            "play_pause":     self.play_pause,
+            "previous_track": self.previous_track,
+            "next_track":     self.next_track,
+            "volume_up":      self.volume_up,
+            "volume_down":    self.volume_down,
+            "mute":           self.mute,
+            "like_song":      self.like_song,
+        }
 
+    def _load_mappings(self):
+        """Read config.json every call so UI changes apply instantly"""
+        with open(CONFIG_PATH) as f:
+            return json.load(f)["gestures"]
+    
     def dispatch(self, gesture):
         if gesture is None or gesture == 'NONE':
             return
-        actions = {
-            'OPEN_PALM':   self.play_pause,
-            'FIST':        self.mute,
-            'POINT_LEFT':  self.previous_track,
-            'POINT_RIGHT': self.next_track,
-            'THUMBS_UP':   self.volume_up,
-            'PINCH':       self.volume_down,
-            'PEACE':       self.like_song,
-        }
-        action = actions.get(gesture)
+        mappings = self._load_mappings()
+        action_key = mappings.get(gesture)
+        action = self._action_map.get(action_key)
         if action:
-            print(f"Dispatching: {gesture}")
+            print(f"Dispatching: {gesture} -> {action_key}")
             action()
-
 
     def _get_active_target(self):
         """Returns 'spotify', 'chrome', 'safari', or None"""
@@ -43,7 +52,6 @@ class ActionDispatcher:
         if 'true' in check('Safari'):
             return 'safari'
         return None
-
 
     def _send_key_to_browser(self, key_code, modifiers=[], browser='Safari'):
         modifier_str = "using shift down" if "shift" in modifiers else ""
@@ -141,4 +149,3 @@ class ActionDispatcher:
 
     def _applescript(self, script):
         subprocess.run(['osascript', '-e', script], capture_output=True)
-        
