@@ -213,7 +213,7 @@ export default function App() {
           ...styles.saveBtn,
           background: saved ? "#00FF9C" : "#fff",
           color: "#000"
-        }} onClick={handleSave}>
+        }} onClick={(e) => { e.stopPropagation(); handleSave(); }}>
           {saved ? "Saved ✓" : "Save Changes"}
         </button>
       </div>
